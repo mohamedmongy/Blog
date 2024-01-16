@@ -4,11 +4,31 @@ import FluentPostgresDriver
 import Leaf
 import Vapor
 
+
+
+ // https://theswiftdev.com/beginners-guide-to-server-side-swift-using-vapor-4/
+
 // configures your application
 public func configure(_ app: Application) async throws {
     // uncomment to serve files from /Public folder
     // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
-
+//    print(app.directory.workingDirectory)
+//    print(app.directory.publicDirectory)
+//    print(app.directory.resourcesDirectory)
+//    print(app.directory.viewsDirectory)
+//    
+//    print("===============")
+//    let variable = Environment.get("EXAMPLE") ?? "undefined"
+//       print(variable)
+//       print(app.environment.name)
+//       print(app.environment.arguments)
+//       print(app.environment.commandInput)
+//
+//       if app.environment.isRelease {
+//           print("production mode")
+//       }
+    
+    print("===============")
     app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
         hostname: Environment.get("DATABASE_HOST") ?? "localhost",
         port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
@@ -17,13 +37,15 @@ public func configure(_ app: Application) async throws {
         database: Environment.get("DATABASE_NAME") ?? "vapor_database",
         tls: .prefer(try .init(configuration: .clientDefault)))
     ), as: .psql)
-
-    app.migrations.add(CreateTodo())
-
-    app.views.use(.leaf)
-
     
-
+    app.migrations.add(CreateTodo())
+    
+    app.views.use(.leaf)
+    
+    app.middleware.use(
+        FileMiddleware(publicDirectory: app.directory.publicDirectory)
+    )
+    
     // register routes
     try routes(app)
 }
