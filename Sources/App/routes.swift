@@ -11,16 +11,22 @@ func routes(_ app: Application) throws {
         "Hello, world!"
     }
 
-    app.get("mongy") { req async -> Response in
+    app.get("blog") { req async -> Response in
         req.templates.renderHtml(
-            WebIndexTemplate(
-                WebIndexContext(
-                    title: "Home",
-                    message: "Hi there, welcome to my page!"
-                )
-            )
+            WebIndexTemplate(WebIndexContext(title: "blog"), {
+                P("Hi there, welcome to blog page!")
+            })
         )
     }
+    
+    app.get("home") { req async -> Response in
+        req.templates.renderHtml(
+            WebHomeTemplate(WebHomeContext(title: "home", message: "Hi there, welcome to home page!"))
+        )
+    }
+    
+
+    
     
     try app.register(collection: TodoController())
 }
