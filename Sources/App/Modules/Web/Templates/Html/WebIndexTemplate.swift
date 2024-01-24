@@ -60,13 +60,14 @@ public struct WebIndexTemplate: TemplateRepresentable {
                             Div {
                                 A("Home")
                                     .href("/home")
-                                    .class("selected", req.url.path == "/")
+                                    .class("selected", req.url.path == "/home")
                                 A("Blog")
-                                    .href("/blog/")
+                                    .href("/blog")
                                     .class("selected", req.url.path == "/blog/")
                                 A("About")
-                                    .href("#")
+                                    .href("/about")
                                     .onClick("javascript:about();")
+                                // Calling the about function in the web.js
                             }
                             .class("menu-items")
                         }
