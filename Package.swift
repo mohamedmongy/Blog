@@ -16,6 +16,7 @@ let package = Package(
         // 🍃 An expressive, performant, and extensible templating language built for Swift.
         .package(url: "https://github.com/vapor/leaf.git", from: "4.2.4"),
         .package(url: "https://github.com/binarybirds/swift-html", from: "1.6.0"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver",from: "4.1.0"),
     ],
     targets: [
         .executableTarget(
@@ -26,6 +27,8 @@ let package = Package(
                 .product(name: "Leaf", package: "leaf"),
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "SwiftHtml", package: "swift-html"),
+                .product(name: "SwiftSvg", package: "swift-html"),
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
             ]
         ),
         .testTarget(name: "AppTests", dependencies: [
