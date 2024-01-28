@@ -25,13 +25,17 @@ public func configure(_ app: Application) async throws {
     )
     
     app.middleware.use(ExtendPathMiddleware())
+    app.sessions.use(.fluent)
+    app.migrations.add(SessionRecord.migration)
+    app.middleware.use(app.sessions.middleware)
     ///
     /// Register  routes to the App Route
     /// Register the  db migration
     ///
     let modules: [ModuleInterface] = [
         WebModule(),
-        BlogModule(),
+        UserModule(),
+        BlogModule()
     ]
     for module in modules {
         try module.boot(app)

@@ -16,7 +16,7 @@ where Self.IDValue == UUID {
 
 public extension DatabaseModelInterface {
     static var schema: String {
-        Module.identifier + "_" + identifier //  blog_post
+        Module.identifier + "_" + identifier //  blog_posts
     }
     static var identifier: String {
         // Blog - Post - Model
@@ -24,6 +24,5 @@ public extension DatabaseModelInterface {
             .dropFirst(Module.identifier.count) // Blog
             .dropLast(5) // Model
             .lowercased() + "s"
-        // result -> post , category
     }
 }

@@ -7,6 +7,7 @@
 
 import Vapor
 import SwiftHtml
+import SwiftSvg
 
 public struct WebIndexTemplate: TemplateRepresentable {
     public var context: WebIndexContext
@@ -54,7 +55,7 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                 .name("menu-button")
                                 .class("menu-button")
                             Label {
-                                //Svg.menuIcon()
+                                Svg.menuIcon()
                             }
                             .for("primary-menu-button")
                             Div {
@@ -68,6 +69,14 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                     .href("/about")
                                     .onClick("javascript:about();")
                                 // Calling the about function in the web.js
+                                
+                                if req.auth.has(AuthenticatedUser.self) {
+                                    A("Sign out")
+                                        .href("/sign-out/")
+                                } else {
+                                    A("Sign in")
+                                        .href("/sign-in/")
+                                }
                             }
                             .class("menu-items")
                         }
@@ -103,20 +112,20 @@ public struct WebIndexTemplate: TemplateRepresentable {
     }
 }
 
-//extension Svg {
-//    static func menuIcon() -> Svg {
-//        Svg {
-//            Line(x1: 3, y1: 12, x2: 21, y2: 12)
-//            Line(x1: 3, y1: 6, x2: 21, y2: 6)
-//            Line(x1: 3, y1: 18, x2: 21, y2: 18)
-//        }
-//        .width(24)
-//        .height(24)
-//        .viewBox(minX: 0, minY: 0, width: 24, height: 24)
-//        .fill("none")
-//        .stroke("currentColor")
-//        .strokeWidth(2)
-//        .strokeLinecap("round")
-//        .strokeLinejoin("round")
-//    }
-//}
+extension Svg {
+    static func menuIcon() -> Svg {
+        Svg {
+            Line(x1: 3, y1: 12, x2: 21, y2: 12)
+            Line(x1: 3, y1: 6, x2: 21, y2: 6)
+            Line(x1: 3, y1: 18, x2: 21, y2: 18)
+        }
+        .width(24)
+        .height(24)
+        .viewBox(minX: 0, minY: 0, width: 24, height: 24)
+        .fill("none")
+        .stroke("currentColor")
+        .strokeWidth(2)
+        .strokeLinecap("round")
+        .strokeLinejoin("round")
+    }
+}
