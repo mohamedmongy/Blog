@@ -14,6 +14,7 @@ struct UserLoginContext {
     let email: String?
     let password: String?
     let error: String?
+    
     init(
         icon: String,
         title: String,
