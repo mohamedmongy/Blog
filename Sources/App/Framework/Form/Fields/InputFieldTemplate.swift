@@ -10,8 +10,7 @@ import SwiftHtml
 
 public struct InputFieldTemplate: TemplateRepresentable {
     public var context: InputFieldContext
-    public init(
-        _
+    public init( _
         context: InputFieldContext
     ) {
         self.context = context

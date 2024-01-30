@@ -15,48 +15,45 @@ struct UserFrontendController {
     }
     
     private func renderSignInView(
-        _ req: Request,
-        _ input: Input? = nil,
-        _ error: String? = nil
+    _ req: Request,
+    _ form: UserLoginForm
     ) -> Response {
         let template = UserLoginTemplate(
             .init(
                 icon: "⬇",
                 title: "Sign in",
                 message: "Please log in with your existing account",
-                email: input?.email,
-                password: input?.password,
-                error: error
+                form: form.render(req: req)
             )
         )
         return req.templates.renderHtml(template)
     }
     
     func signInView(
-        _ req: Request) async throws -> Response {
-            renderSignInView(req)
-        }
+    _ req: Request
+    ) async throws -> Response {
+        renderSignInView(req, .init())
+    }
     
     func signInAction(
-        _ req: Request) async throws -> Response {
-            /// if the user is authenticated, we can store the user data inside the session too
-            if let user = req.auth.get(AuthenticatedUser.self) {
-                req.session.authenticate(user)
-                return req.redirect(to: "/")
-            }
-            /// if the user credentials were wrong we render the form again with an error message
-            let input = try req.content.decode(Input.self)
-            return renderSignInView(
-                req,
-                input,
-                "Invalid email or password."
-            )
+    _ req: Request
+    ) async throws -> Response {
+        /// the user is authenticated, we can store the user data inside the session too
+        if let user = req.auth.get(AuthenticatedUser.self) {
+            req.session.authenticate(user)
+            return req.redirect(to: "/")
         }
+        let form = UserLoginForm()
+        try await form.process(req: req)
+        form.error = "Invalid email or password."
+        return renderSignInView(req, form)
+    }
     
-    func signOut(req: Request) throws -> Response {
+    func signOut(
+    _ req: Request
+    ) throws -> Response {
         req.auth.logout(AuthenticatedUser.self)
         req.session.unauthenticate(AuthenticatedUser.self)
-        req.session.destroy()
         return req.redirect(to: "/")
     }
 }
