@@ -9,11 +9,6 @@ import Vapor
 
 struct UserFrontendController {
     
-    private struct Input: Decodable {
-        let email: String?
-        let password: String?
-    }
-    
     private func renderSignInView(
     _ req: Request,
     _ form: UserLoginForm
@@ -45,6 +40,10 @@ struct UserFrontendController {
         }
         let form = UserLoginForm()
         try await form.process(req: req)
+        let isValid = try await form.validate(req: req)
+        if !isValid {
+            form.error = "Invalid email or password."
+        }
         form.error = "Invalid email or password."
         return renderSignInView(req, form)
     }
