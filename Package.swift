@@ -17,6 +17,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/leaf.git", from: "4.2.4"),
         .package(url: "https://github.com/binarybirds/swift-html", from: "1.6.0"),
         .package(url: "https://github.com/vapor/fluent-sqlite-driver",from: "4.1.0"),
+        .package(url: "https://github.com/binarybirds/liquid.git", from: "1.2.0"),
+        .package(url: "https://github.com/binarybirds/liquid-local-driver.git", from: "1.2.0"),
     ],
     targets: [
         .executableTarget(
@@ -29,6 +31,8 @@ let package = Package(
                 .product(name: "SwiftHtml", package: "swift-html"),
                 .product(name: "SwiftSvg", package: "swift-html"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
+                .product(name: "Liquid", package: "liquid"),
+                .product(name: "LiquidLocalDriver", package: "liquid-local-driver"),
             ]
         ),
         .testTarget(name: "AppTests", dependencies: [

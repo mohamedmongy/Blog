@@ -73,6 +73,8 @@ public struct WebIndexTemplate: TemplateRepresentable {
                                 if req.auth.has(AuthenticatedUser.self) {
                                     A("Sign out")
                                         .href("/sign-out/")
+                                    A("Admin")
+                                        .href("/admin/")
                                 } else {
                                     A("Sign in")
                                         .href("/sign-in/")
@@ -109,23 +111,5 @@ public struct WebIndexTemplate: TemplateRepresentable {
             }
         }
         .lang("en-US")
-    }
-}
-
-extension Svg {
-    static func menuIcon() -> Svg {
-        Svg {
-            Line(x1: 3, y1: 12, x2: 21, y2: 12)
-            Line(x1: 3, y1: 6, x2: 21, y2: 6)
-            Line(x1: 3, y1: 18, x2: 21, y2: 18)
-        }
-        .width(24)
-        .height(24)
-        .viewBox(minX: 0, minY: 0, width: 24, height: 24)
-        .fill("none")
-        .stroke("currentColor")
-        .strokeWidth(2)
-        .strokeLinecap("round")
-        .strokeLinejoin("round")
     }
 }

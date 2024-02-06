@@ -3,6 +3,8 @@ import Fluent
 import FluentPostgresDriver
 import FluentSQLiteDriver
 import Vapor
+import Liquid
+import LiquidLocalDriver
 
 // configures your application
 public func configure(_ app: Application) async throws {
@@ -16,6 +18,16 @@ public func configure(_ app: Application) async throws {
 //        database: Environment.get("DATABASE_NAME") ?? "vapor_database",
 //        tls: .prefer(try .init(configuration: .clientDefault)))
 //    ), as: .psql)
+    
+    app.fileStorages.use(
+        .local(
+            publicUrl: "http://localhost:8080",
+            publicPath: app.directory.publicDirectory,
+            workDirectory: "assets"
+        ),
+        as: .local
+    )
+    app.routes.defaultMaxBodySize = "10mb"
     
     let dbPath = app.directory.resourcesDirectory + "db.sqlite"
     app.databases.use(.sqlite(.file(dbPath)), as: .sqlite)
@@ -35,6 +47,7 @@ public func configure(_ app: Application) async throws {
     let modules: [ModuleInterface] = [
         WebModule(),
         UserModule(),
+        AdminModule(),
         BlogModule()
     ]
     for module in modules {
