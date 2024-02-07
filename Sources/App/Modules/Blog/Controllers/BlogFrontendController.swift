@@ -16,22 +16,14 @@ struct BlogFrontendController {
             .sort(\.$date, .descending)
             .all()
         
-        let posts = try postModels.map {
-            Blog.Post.List(
-                id: try $0.requireID(),
-                title: $0.title,
-                slug: $0.slug,
-                image: $0.imageKey,
-                excerpt: $0.excerpt,
-                date: $0.date
-            )
-        }
+        let api = BlogPostApiController()
+        let list = postModels.map { api.mapList($0) }
         
         let ctx = BlogPostsContext(
             icon: "🔥",
             title: "Blog",
             message: "Hot news and stories about everything.",
-            posts: posts
+            posts: list
         )
         
         return req.templates.renderHtml(
@@ -55,21 +47,9 @@ struct BlogFrontendController {
             return req.redirect(to: "/")
         }
         
-        let ctx = BlogPostContext(
-            post: Blog.Post.Detail(
-                id: post.id!,
-                title: post.title,
-                slug: post.slug,
-                image: post.imageKey,
-                excerpt: post.excerpt,
-                date: post.date,
-                category: .init(
-                    id: post.category.id!,
-                    title: post.category.title
-                ),
-                content: post.content
-            )
-        )
+        let api = BlogPostApiController()
+        let ctx = BlogPostContext(post: api.mapDetail(post))
+        
         return req.templates.renderHtml(
             BlogPostTemplate(ctx)
         )
