@@ -26,6 +26,20 @@ struct BlogRouter: RouteCollection {
             .grouped(AuthenticatedUser.redirectMiddleware(path: "/"))
             .grouped("admin", "blog", "posts")
         posts.get(use: postAdminController.listView)
-        posts.get(":postId", use: postAdminController.detailView)
+        
+        let postId = posts.grouped(":postId")
+        postId.get(use: postAdminController.detailView)
+        
+        // Create Post
+        posts.get("create", use: postAdminController.createView)
+        posts.post("create", use: postAdminController.createAction)
+        
+        // Update Post
+        postId.get("update", use: postAdminController.updateView)
+        postId.post("update", use: postAdminController.updateAction)
+        
+        // Delete Post
+        postId.get("delete", use: postAdminController.deleteView)
+        postId.post("delete", use: postAdminController.deleteAction)
     }
 }
