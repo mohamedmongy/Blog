@@ -10,6 +10,7 @@ import Vapor
 struct BlogRouter: RouteCollection {
     let controller = BlogFrontendController()
     let postAdminController = BlogPostAdminController()
+    let categoryApiController = BlogCategoryApiController()
     
     func boot(
         routes: RoutesBuilder
@@ -41,5 +42,16 @@ struct BlogRouter: RouteCollection {
         // Delete Post
         postId.get("delete", use: postAdminController.deleteView)
         postId.post("delete", use: postAdminController.deleteAction)
+        
+        let blogApi = routes.grouped("api", "blog")
+        let categoriesApi = blogApi.grouped("categories")
+        categoriesApi.get(use: categoryApiController.listApi)
+        
+        let categoryApiId = categoriesApi.grouped(":categoryId")
+        categoryApiId.get(use: categoryApiController.detailApi)
+        categoriesApi.post(use: categoryApiController.createApi)
+        categoryApiId.put(use: categoryApiController.updateApi)
+        categoryApiId.patch(use: categoryApiController.patchApi)
+        categoryApiId.delete(use: categoryApiController.deleteApi)
     }
 }
